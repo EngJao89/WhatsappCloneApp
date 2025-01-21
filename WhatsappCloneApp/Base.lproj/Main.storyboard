@@ -318,6 +318,9 @@
                                     <constraint firstAttribute="height" constant="30" id="v6t-oh-4bj"/>
                                 </constraints>
                                 <state key="normal" title="Escolher imagem"/>
+                                <connections>
+                                    <action selector="alterarImagem:" destination="nn0-JA-EGR" eventType="touchUpInside" id="mAG-mf-PjY"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -346,6 +349,11 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="email" destination="Bak-u9-Fpd" id="7HH-gd-Gob"/>
+                        <outlet property="imagem" destination="VbE-f9-FtN" id="Fya-KB-BzH"/>
+                        <outlet property="nome" destination="m1f-bi-Nkc" id="Ejg-IU-p4w"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ERL-NZ-zQ9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="51B-SO-Jvb" userLabel="Exit" sceneMemberID="exit"/>
