@@ -8,14 +8,38 @@
 import UIKit
 import FirebaseAuth
 
-class AjustesViewController: UIViewController {
+class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @IBOutlet weak var nome: UILabel!
+    @IBOutlet weak var email: UILabel!
+    @IBOutlet weak var imagem: UIImageView!
     
     var auth: Auth!
+    var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        imagePicker.delegate = self
+        
         auth = Auth.auth()
+        
+    }
+    
+    @IBAction func alterarImagem(_ sender: Any) {
+        
+        imagePicker.sourceType = .savedPhotosAlbum
+        present(imagePicker, animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        let imagemRecuperada = info[ UIImagePickerController.InfoKey.originalImage ] as! UIImage
+        
+        self.imagem.image = imagemRecuperada
+        
+        imagePicker.dismiss(animated: true, completion: nil)
         
     }
     
