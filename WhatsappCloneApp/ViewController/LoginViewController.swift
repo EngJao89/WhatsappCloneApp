@@ -13,13 +13,27 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var campoEmail: UITextField!
     @IBOutlet weak var campoSenha: UITextField!
     var auth: Auth!
+    var handler: AuthStateDidChangeListenerHandle!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         auth = Auth.auth()
+        
+        //Adiciona listener para autenticacao de usuario
+        handler = auth.addStateDidChangeListener { (autenticacao, usuario) in
+            
+            if usuario != nil {
+                self.performSegue(withIdentifier: "segueLoginAutomatico", sender: nil)
+            }
+            
+        }
+        
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        //auth.removeStateDidChangeListener(handler)
+    }
     
     @IBAction func logar(_ sender: Any) {
         
@@ -51,6 +65,9 @@ class LoginViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
+    @IBAction func unwindToLogin(_ unwindSegue: UIStoryboardSegue) {
+        
+    }
 
     /*
     // MARK: - Navigation
@@ -63,4 +80,3 @@ class LoginViewController: UIViewController {
     */
 
 }
-
