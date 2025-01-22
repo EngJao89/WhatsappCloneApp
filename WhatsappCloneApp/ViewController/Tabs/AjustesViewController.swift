@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseFirestore
 
 class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -17,7 +18,9 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     var auth: Auth!
     var storage: Storage!
+    var firestore: Firestore!
     var imagePicker = UIImagePickerController()
+    var idUsuario: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,37 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         auth = Auth.auth()
         storage = Storage.storage()
+        firestore = Firestore.firestore()
+        
+        //Recuperar id usuario logado
+        if let id = auth.currentUser?.uid {
+            self.idUsuario = id
+        }
+        
+        //Recupera dados do usuario
+        recuperarDadosUsuario()
+        
+    }
+    
+    func recuperarDadosUsuario() {
+        
+        let usuariosRef = self.firestore
+            .collection("usuarios")
+        .document( idUsuario )
+        
+        usuariosRef.getDocument { (snapshot, erro) in
+            
+            if let dados = snapshot?.data() {
+                
+                let nomeUsuario = dados["nome"] as? String
+                let emailUsuario = dados["email"] as? String
+                
+                self.nome.text = nomeUsuario
+                self.email.text = emailUsuario
+                
+            }
+            
+        }
         
     }
     
@@ -54,10 +88,22 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
                 let idUsuario = usuarioLogado.uid
                 
                 let nomeImagem = "\(idUsuario).jpg"
-                imagens.child("perfil").child( nomeImagem )
-                    .putData(imagemUpload, metadata: nil) { (metaData, erro) in
+                let imagemPerfilRef = imagens.child("perfil").child( nomeImagem )
+                    imagemPerfilRef.putData(imagemUpload, metadata: nil) { (metaData, erro) in
                         
                         if erro == nil {
+                            
+                            imagemPerfilRef.downloadURL { (url, erro) in
+                                if let urlImagem = url?.absoluteString {
+                                    self.firestore
+                                        .collection("usuarios")
+                                    .document(idUsuario)
+                                        .updateData([
+                                            "urlImagem" : urlImagem
+                                        ])
+                                }
+                            }
+                            
                             print("Sucesso ao fazer upload da imagem")
                         }else {
                            print("Erro ao fazer upload da imagem")
