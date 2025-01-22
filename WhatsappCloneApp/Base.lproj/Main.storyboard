@@ -244,23 +244,104 @@
         <!--Contatos-->
         <scene sceneID="xCT-Tn-lJg">
             <objects>
-                <viewController id="ekO-DQ-RdY" sceneMemberID="viewController">
+                <viewController id="ekO-DQ-RdY" customClass="ContatosViewController" customModule="WhatsApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sm7-4m-HyV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Contatos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moQ-Lc-Bab">
-                                <rect key="frame" x="135" y="426" width="145" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="37"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="t8M-4R-LhB">
+                                <rect key="frame" x="0.0" y="88" width="414" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CdG-Zt-9Zy">
+                                <rect key="frame" x="0.0" y="144" width="414" height="669"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="celulaContatos" id="GVm-DI-Ezr" customClass="ContatoTableViewCell" customModule="WhatsApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GVm-DI-Ezr" id="I5l-m6-B8o">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bPU-dv-eM3">
+                                                    <rect key="frame" x="30" y="16" width="50" height="48"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="VMT-PC-kt1"/>
+                                                        <constraint firstAttribute="height" constant="50" id="iDM-I9-YJh"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="25"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="YCV-zI-y8s">
+                                                    <rect key="frame" x="85" y="16" width="299" height="48"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jamilton Damasceno" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BNu-TC-He1">
+                                                            <rect key="frame" x="0.0" y="0.0" width="299" height="20.5"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="20.5" id="R0w-mt-dfp"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="jamilton@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DRZ-0m-veE">
+                                                            <rect key="frame" x="0.0" y="28.5" width="299" height="19.5"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="19.5" id="OVC-SS-aQn"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="bPU-dv-eM3" firstAttribute="top" secondItem="I5l-m6-B8o" secondAttribute="topMargin" constant="5" id="2mb-ZY-Xw2"/>
+                                                <constraint firstItem="YCV-zI-y8s" firstAttribute="centerY" secondItem="I5l-m6-B8o" secondAttribute="centerY" id="6l8-3B-rH3"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="YCV-zI-y8s" secondAttribute="bottom" constant="5" id="Jys-dB-gRh"/>
+                                                <constraint firstItem="YCV-zI-y8s" firstAttribute="leading" secondItem="bPU-dv-eM3" secondAttribute="trailing" constant="5" id="OFs-Im-P38"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="bPU-dv-eM3" secondAttribute="bottom" constant="5" id="aN8-Y9-SVc"/>
+                                                <constraint firstItem="bPU-dv-eM3" firstAttribute="leading" secondItem="I5l-m6-B8o" secondAttribute="leadingMargin" constant="10" id="fU5-Vf-xl5"/>
+                                                <constraint firstItem="bPU-dv-eM3" firstAttribute="centerY" secondItem="I5l-m6-B8o" secondAttribute="centerY" id="r7i-z7-XBm"/>
+                                                <constraint firstItem="YCV-zI-y8s" firstAttribute="leading" secondItem="bPU-dv-eM3" secondAttribute="trailing" constant="5" id="tKh-Fo-Rwq"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="YCV-zI-y8s" secondAttribute="trailing" constant="10" id="uoa-g2-LAn"/>
+                                                <constraint firstItem="YCV-zI-y8s" firstAttribute="top" secondItem="I5l-m6-B8o" secondAttribute="topMargin" constant="5" id="xaO-SC-RQp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="fotoContato" destination="bPU-dv-eM3" id="bnD-Y2-7St"/>
+                                            <outlet property="textoEmail" destination="DRZ-0m-veE" id="3QA-Ch-DpD"/>
+                                            <outlet property="textoNome" destination="BNu-TC-He1" id="aCo-61-Q9e"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="ekO-DQ-RdY" id="oGm-68-3JF"/>
+                                    <outlet property="delegate" destination="ekO-DQ-RdY" id="D2g-RL-8Lr"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="CdG-Zt-9Zy" firstAttribute="bottom" secondItem="k44-9l-OFR" secondAttribute="bottom" id="9P8-Gf-Jwj"/>
+                            <constraint firstItem="CdG-Zt-9Zy" firstAttribute="trailing" secondItem="k44-9l-OFR" secondAttribute="trailing" id="9hJ-rs-3Ex"/>
+                            <constraint firstItem="t8M-4R-LhB" firstAttribute="leading" secondItem="k44-9l-OFR" secondAttribute="leading" id="A7j-wm-1Nf"/>
+                            <constraint firstItem="CdG-Zt-9Zy" firstAttribute="top" secondItem="t8M-4R-LhB" secondAttribute="bottom" symbolic="YES" id="Jhm-hl-1WF"/>
+                            <constraint firstItem="CdG-Zt-9Zy" firstAttribute="leading" secondItem="k44-9l-OFR" secondAttribute="leading" id="OVF-kE-Jfl"/>
+                            <constraint firstItem="k44-9l-OFR" firstAttribute="trailing" secondItem="t8M-4R-LhB" secondAttribute="trailing" id="Rhz-Gb-ePt"/>
+                            <constraint firstItem="t8M-4R-LhB" firstAttribute="top" secondItem="k44-9l-OFR" secondAttribute="top" id="dcT-7N-pqe"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="k44-9l-OFR"/>
                     </view>
                     <navigationItem key="navigationItem" title="Contatos" id="e2m-MS-jbB"/>
+                    <connections>
+                        <outlet property="tableViewContatos" destination="CdG-Zt-9Zy" id="Dwd-ds-MOk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6W5-1f-qAv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
