@@ -249,9 +249,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="t8M-4R-LhB">
+                            <searchBar contentMode="redraw" placeholder="Digite um nome" translatesAutoresizingMaskIntoConstraints="NO" id="t8M-4R-LhB">
                                 <rect key="frame" x="0.0" y="88" width="414" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CdG-Zt-9Zy">
                                 <rect key="frame" x="0.0" y="144" width="414" height="669"/>
@@ -264,7 +268,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bPU-dv-eM3">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bPU-dv-eM3">
                                                     <rect key="frame" x="30" y="16" width="50" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="VMT-PC-kt1"/>
@@ -338,14 +342,81 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="k44-9l-OFR"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Contatos" id="e2m-MS-jbB"/>
+                    <navigationItem key="navigationItem" title="Contatos" id="e2m-MS-jbB">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="E4x-94-Ek9">
+                            <connections>
+                                <segue destination="Oc9-lF-thH" kind="show" id="yve-Ab-YSC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="searchBarContatos" destination="t8M-4R-LhB" id="xb0-cn-uX3"/>
                         <outlet property="tableViewContatos" destination="CdG-Zt-9Zy" id="Dwd-ds-MOk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6W5-1f-qAv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4079.7101449275365" y="-315.40178571428572"/>
+        </scene>
+        <!--Cadastro de contato-->
+        <scene sceneID="pd7-LJ-A6Q">
+            <objects>
+                <viewController id="Oc9-lF-thH" customClass="CadastroContatoViewController" customModule="WhatsApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MQO-3n-bsL">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Digite e-mail para cadastrar um novo contato" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kyb-I1-6Af">
+                                <rect key="frame" x="20" y="108" width="374" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="usuario@gmail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9fB-tp-9RJ">
+                                <rect key="frame" x="20" y="138" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGj-U9-nAG">
+                                <rect key="frame" x="164" y="182" width="86" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Cadastrar"/>
+                                <connections>
+                                    <action selector="cadastrarContato:" destination="Oc9-lF-thH" eventType="touchUpInside" id="oW4-Ad-5Tx"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="erro" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j3W-cO-Qmk">
+                                <rect key="frame" x="20" y="228" width="374" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="j3W-cO-Qmk" firstAttribute="top" secondItem="WGj-U9-nAG" secondAttribute="bottom" constant="10" id="3Gl-kp-hUI"/>
+                            <constraint firstItem="Kyb-I1-6Af" firstAttribute="top" secondItem="UNd-ec-aPN" secondAttribute="top" constant="20" id="8t2-iH-DYl"/>
+                            <constraint firstItem="UNd-ec-aPN" firstAttribute="trailing" secondItem="j3W-cO-Qmk" secondAttribute="trailing" constant="20" id="DBZ-8y-kfb"/>
+                            <constraint firstItem="UNd-ec-aPN" firstAttribute="trailing" secondItem="9fB-tp-9RJ" secondAttribute="trailing" constant="20" id="DKE-49-vOO"/>
+                            <constraint firstItem="Kyb-I1-6Af" firstAttribute="leading" secondItem="UNd-ec-aPN" secondAttribute="leading" constant="20" id="FDp-bx-5Vu"/>
+                            <constraint firstItem="WGj-U9-nAG" firstAttribute="centerX" secondItem="MQO-3n-bsL" secondAttribute="centerX" id="Fr2-2D-yUE"/>
+                            <constraint firstItem="WGj-U9-nAG" firstAttribute="top" secondItem="9fB-tp-9RJ" secondAttribute="bottom" constant="10" id="GHv-A1-Qrj"/>
+                            <constraint firstItem="UNd-ec-aPN" firstAttribute="trailing" secondItem="Kyb-I1-6Af" secondAttribute="trailing" constant="20" id="Slh-Ea-gfo"/>
+                            <constraint firstItem="j3W-cO-Qmk" firstAttribute="leading" secondItem="UNd-ec-aPN" secondAttribute="leading" constant="20" id="Ul4-Cx-RU2"/>
+                            <constraint firstItem="9fB-tp-9RJ" firstAttribute="top" secondItem="Kyb-I1-6Af" secondAttribute="bottom" constant="10" id="VyU-GQ-Edf"/>
+                            <constraint firstItem="9fB-tp-9RJ" firstAttribute="leading" secondItem="UNd-ec-aPN" secondAttribute="leading" constant="20" id="YmU-pJ-qOn"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UNd-ec-aPN"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Cadastro de contato" id="3gj-Dc-YkP"/>
+                    <connections>
+                        <outlet property="campoEmail" destination="9fB-tp-9RJ" id="nhs-FT-E8f"/>
+                        <outlet property="mensagemErro" destination="j3W-cO-Qmk" id="eHm-qx-t2r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bEY-g0-pkv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4885.507246376812" y="-313.39285714285711"/>
         </scene>
         <!--Ajustes-->
         <scene sceneID="zpk-od-rYT">
