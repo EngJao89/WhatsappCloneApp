@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseFirestore
+import FirebaseUI
 
 class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -56,6 +57,10 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
                 self.nome.text = nomeUsuario
                 self.email.text = emailUsuario
+                
+                if let urlImagem = dados["urlImagem"] as? String {
+                    self.imagem.sd_setImage(with: URL(string: urlImagem), completed: nil)
+                }
                 
             }
             
