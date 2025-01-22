@@ -9,89 +9,79 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class CadastroContatoViewController: UIViewController {
+class CadastroViewController: UIViewController {
     
+    @IBOutlet weak var campoNome: UITextField!
     @IBOutlet weak var campoEmail: UITextField!
-    @IBOutlet weak var mensagemErro: UILabel!
+    @IBOutlet weak var campoSenha: UITextField!
+    var auth:Auth!
+    var firestore: Firestore!
     
-    var idUsuarioLogado: String!
-    var emailUsuarioLogado: String!
-    
-    var auth: Auth!
-    var db: Firestore!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         auth = Auth.auth()
-        db = Firestore.firestore()
-        
-        if let currentUser = auth.currentUser {
-            self.idUsuarioLogado = currentUser.uid
-            self.emailUsuarioLogado = currentUser.email
-        }
-        
+        firestore = Firestore.firestore()
     }
     
-    @IBAction func cadastrarContato(_ sender: Any) {
+    @IBAction func cadastrar(_ sender: Any) {
         
-        self.mensagemErro.isHidden = true
-        
-        //Verifica e está adicionado próprio e-mail
-        if let emailDigitado = campoEmail.text {
-            if emailDigitado == self.emailUsuarioLogado {
-                mensagemErro.isHidden = false
-                mensagemErro.text = "Você está adicionado seu próprio email!"
-                return
-            }
-            
-            //Verifica se existe o usuário no Firebase
-            db.collection("usuarios")
-            .whereField("email", isEqualTo: emailDigitado)
-                .getDocuments { (snapshotResultado, erro) in
+        if let nome = campoNome.text {
+            if let email = campoEmail.text {
+                if let senha = campoSenha.text {
                     
-                    //Conta total de retorno
-                    if let totalItens = snapshotResultado?.count {
-                        if totalItens == 0 {
-                            self.mensagemErro.text = "Usuário não cadastrado!"
-                            self.mensagemErro.isHidden = false
-                            return
-                        }
-                    }
-                    
-                    //Salva contato
-                    if let snapshot = snapshotResultado {
-                        
-                        for document in snapshot.documents {
-                            let dados = document.data()
-                            self.salvarContato(dadosContato: dados)
-                        }
-                        
-                    }
-                    
-            }
-            
-        }
-        
-    }
-    
-    func salvarContato(dadosContato: Dictionary<String, Any>) {
-        
-        if let idUsuarioContato = dadosContato["id"] {
-            db.collection("usuarios")
-            .document( idUsuarioLogado )
-            .collection("contatos")
-            .document( String(describing: idUsuarioContato) )
-                .setData(dadosContato) { (erro) in
-                    if erro == nil {
-                        self.navigationController?.popViewController(animated: true)
-                        
-                    }
-            }
-        }
+                    auth.createUser(withEmail: email, password: senha) { (dadosResultado, erro) in
 
+                        if erro == nil {
+                            
+                            //salvar dados do usuário no firebase
+                            if let idUsuario = dadosResultado?.user.uid {
+                                
+                                self.firestore.collection("usuarios")
+                                .document( idUsuario )
+                                .setData([
+                                    "nome" : nome,
+                                    "email" : email,
+                                    "id" : idUsuario
+                                ])
+                                
+                            }
+                            
+                            print("Sucesso ao cadastrar usuario!")
+                            
+                            
+                        }else{
+                            print("Erro ao cadastrar usuario!")
+                        }
+                        
+                    }
+                    
+                }else{
+                    print("Digite sua senha!")
+                }
+            }else{
+                print("Digite seu email!")
+            }
+        }else{
+            print("Digite seu nome!")
+        }
         
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
 
 }

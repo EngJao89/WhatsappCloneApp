@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class MensagensViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -15,9 +17,27 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var mensagemCaixaTexto: UITextField!
     
     var listaMensagens: [String]!
+    var idUsuarioLogado: String!
+    var contato: Dictionary<String, Any>!
+    
+    var auth: Auth!
+    var db: Firestore!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        auth = Auth.auth()
+        db = Firestore.firestore()
+        
+        //Recuperar id usuario logado
+        if let id = auth.currentUser?.uid {
+            self.idUsuarioLogado = id
+        }
+        
+        //Configura título da tela
+        if let nome = contato["nome"] {
+            self.navigationItem.title = nome as? String
+        }
 
         //configurações da tableView
         tableViewMensagens.separatorStyle = .none
@@ -30,6 +50,35 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     @IBAction func enviarMensagem(_ sender: Any) {
+        
+        if let textoDigitado = mensagemCaixaTexto.text {
+            if !textoDigitado.isEmpty {
+                if let idUsuarioDestinatario = contato["id"] as? String {
+                    
+                    let mensagem = [
+                        "idUsuario" : idUsuarioLogado,
+                        "texto" : textoDigitado
+                    ]
+                
+                    
+                    salvarMensagem(idRemetente: idUsuarioLogado, idDestinatario: idUsuarioDestinatario, mensagem: mensagem)
+                    
+                }
+            }
+        }
+        
+    }
+    
+    func salvarMensagem(idRemetente: String, idDestinatario: String, mensagem: Dictionary<String, Any>) {
+        
+        db.collection("mensagens")
+            .document( idRemetente )
+            .collection( idDestinatario )
+            .addDocument(data: mensagem)
+        
+        //limpar caixa de texto
+        mensagemCaixaTexto.text = ""
+        
     }
     
     /*Métodos para listagem na tabela */
