@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseStorage
 
 class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -15,6 +16,7 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var imagem: UIImageView!
     
     var auth: Auth!
+    var storage: Storage!
     var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
@@ -23,6 +25,7 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         
         auth = Auth.auth()
+        storage = Storage.storage()
         
     }
     
@@ -38,6 +41,33 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
         let imagemRecuperada = info[ UIImagePickerController.InfoKey.originalImage ] as! UIImage
         
         self.imagem.image = imagemRecuperada
+        
+        let imagens = storage
+            .reference()
+            .child("imagens")
+        
+        
+        if let imagemUpload = imagemRecuperada.jpegData(compressionQuality: 0.3) {
+            
+            if let usuarioLogado = auth.currentUser {
+                
+                let idUsuario = usuarioLogado.uid
+                
+                let nomeImagem = "\(idUsuario).jpg"
+                imagens.child("perfil").child( nomeImagem )
+                    .putData(imagemUpload, metadata: nil) { (metaData, erro) in
+                        
+                        if erro == nil {
+                            print("Sucesso ao fazer upload da imagem")
+                        }else {
+                           print("Erro ao fazer upload da imagem")
+                        }
+                        
+                }
+                
+            }
+            
+        }
         
         imagePicker.dismiss(animated: true, completion: nil)
         
