@@ -62,8 +62,11 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
                         "data" : FieldValue.serverTimestamp()
                     ]
                 
-                    
+                    //salvar mensagem para remetente
                     salvarMensagem(idRemetente: idUsuarioLogado, idDestinatario: idUsuarioDestinatario, mensagem: mensagem)
+                    
+                    //salvar mensagem para o destinatário
+                    salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: idUsuarioLogado, mensagem: mensagem)
                     
                 }
             }
