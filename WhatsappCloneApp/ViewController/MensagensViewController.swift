@@ -16,9 +16,10 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var mensagemCaixaTexto: UITextField!
     
-    var listaMensagens: [String]!
+    var listaMensagens: [Dictionary<String, Any>]! = []
     var idUsuarioLogado: String!
     var contato: Dictionary<String, Any>!
+    var mensagensListener: ListenerRegistration!
     
     var auth: Auth!
     var db: Firestore!
@@ -44,7 +45,7 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         tableViewMensagens.backgroundView = UIImageView(image: UIImage(named: "bg"))
         
         //Configura lista de mensagens
-        listaMensagens = ["Olá, tudo bem?", "Tudo ótimo meu amigo", "Estou muito doente e precisava falar com você, será que poderia ir na farmácia pegar alguns remédios?", "Posso sim, quais?", "Pode pegar um Resfenol, pode ser aquele dia e noite, sabe qual é?", "Sei sim!!", "Excelente!!Muuuuuuuito obrigadooo!!", "Por nada!! espero que melhore logo"]
+        //listaMensagens = ["Olá, tudo bem?", "Tudo ótimo meu amigo", "Estou muito doente e precisava falar com você, será que poderia ir na farmácia pegar alguns remédios?", "Posso sim, quais?", "Pode pegar um Resfenol, pode ser aquele dia e noite, sabe qual é?", "Sei sim!!", "Excelente!!Muuuuuuuito obrigadooo!!", "Por nada!! espero que melhore logo"]
         
     }
     
@@ -55,9 +56,10 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
             if !textoDigitado.isEmpty {
                 if let idUsuarioDestinatario = contato["id"] as? String {
                     
-                    let mensagem = [
-                        "idUsuario" : idUsuarioLogado,
-                        "texto" : textoDigitado
+                    let mensagem: Dictionary<String, Any> = [
+                        "idUsuario" : idUsuarioLogado!,
+                        "texto" : textoDigitado,
+                        "data" : FieldValue.serverTimestamp()
                     ]
                 
                     
@@ -81,6 +83,32 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
+    func addListenerRecuperarMensagens() {
+        
+        if let idDestinatario = contato["id"] as? String {
+            mensagensListener = db.collection("mensagens")
+            .document( idUsuarioLogado )
+            .collection( idDestinatario )
+            .order(by: "data", descending: false)
+                .addSnapshotListener { (querySnapshot, erro) in
+                    
+                    //limpa lista
+                    self.listaMensagens.removeAll()
+                    
+                    //Recupera dados
+                    if let snapshot = querySnapshot {
+                        for document in snapshot.documents {
+                            let dados = document.data()
+                            self.listaMensagens.append(dados)
+                        }
+                        self.tableViewMensagens.reloadData()
+                    }
+                    
+            }
+        }
+        
+    }
+    
     /*Métodos para listagem na tabela */
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -97,13 +125,15 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         let celulaEsquerda = tableView.dequeueReusableCell(withIdentifier: "celulaMensagensEsquerda", for: indexPath) as! MensagensTableViewCell
         
         let indice = indexPath.row
-        let mensagem = self.listaMensagens[indice]
+        let dados = self.listaMensagens[indice]
+        let texto = dados["texto"] as? String
+        let idUsuario = dados["idUsuario"] as? String
         
-        if indice % 2 == 0 {
-            celulaDireita.mensagemDireitaLabel.text = mensagem
+        if idUsuarioLogado == idUsuario {
+            celulaDireita.mensagemDireitaLabel.text = texto
             return celulaDireita
         }else{
-            celulaEsquerda.mensagemEsquerdaLabel.text = mensagem
+            celulaEsquerda.mensagemEsquerdaLabel.text = texto
             return celulaEsquerda
         }
         
@@ -111,11 +141,18 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         self.tabBarController?.tabBar.isHidden = true
+        
+        addListenerRecuperarMensagens()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
+        
+        mensagensListener.remove()
+        
     }
 
 }
