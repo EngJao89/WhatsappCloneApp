@@ -8,8 +8,9 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 
-class MensagensViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MensagensViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var tableViewMensagens: UITableView!
     @IBOutlet weak var fotoBotao: UIButton!
@@ -20,15 +21,20 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     var idUsuarioLogado: String!
     var contato: Dictionary<String, Any>!
     var mensagensListener: ListenerRegistration!
+    var imagePicker = UIImagePickerController()
     
     var auth: Auth!
     var db: Firestore!
+    var storage: Storage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         auth = Auth.auth()
         db = Firestore.firestore()
+        storage = Storage.storage()
+        
+        imagePicker.delegate = self
         
         //Recuperar id usuario logado
         if let id = auth.currentUser?.uid {
@@ -46,6 +52,69 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //Configura lista de mensagens
         //listaMensagens = ["Olá, tudo bem?", "Tudo ótimo meu amigo", "Estou muito doente e precisava falar com você, será que poderia ir na farmácia pegar alguns remédios?", "Posso sim, quais?", "Pode pegar um Resfenol, pode ser aquele dia e noite, sabe qual é?", "Sei sim!!", "Excelente!!Muuuuuuuito obrigadooo!!", "Por nada!! espero que melhore logo"]
+        
+    }
+    
+    @IBAction func enviarImagem(_ sender: Any) {
+        
+        imagePicker.sourceType = .savedPhotosAlbum
+        present(imagePicker, animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        let imagemRecuperada = info[ UIImagePickerController.InfoKey.originalImage ] as! UIImage
+        
+        let imagens = storage
+                    .reference()
+                    .child("imagens")
+        
+        if let imagemUpload = imagemRecuperada.jpegData(compressionQuality: 0.3) {
+            
+            let identificadorUnico = UUID().uuidString
+            let nomeImagem = "\(identificadorUnico).jpg"
+            let imagemMensagemRef = imagens.child("mensagens").child( nomeImagem )
+            
+            imagemMensagemRef.putData(imagemUpload, metadata: nil) { (metaData, erro) in
+                
+                if erro == nil {
+                    print("Sucesso ao fazer upload da imagem")
+                    
+                    imagemMensagemRef.downloadURL { (url, erro) in
+                        
+                        if let urlImagem = url?.absoluteString {
+                            
+                            if let idUsuarioDestinatario = self.contato["id"] as? String {
+                                
+                                let mensagem: Dictionary<String, Any> = [
+                                    "idUsuario" : self.idUsuarioLogado!,
+                                    "urlImagem" : urlImagem,
+                                    "data" : FieldValue.serverTimestamp()
+                                ]
+                            
+                                //salvar mensagem para remetente
+                                self.salvarMensagem(idRemetente: self.idUsuarioLogado, idDestinatario: idUsuarioDestinatario, mensagem: mensagem)
+                                
+                                //salvar mensagem para o destinatário
+                                self.salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: self.idUsuarioLogado, mensagem: mensagem)
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }else{
+                    print("Erro ao fazer upload da imagem")
+                }
+                
+            }
+            
+        }
+        
+        
+        imagePicker.dismiss(animated: true, completion: nil)
         
     }
     
