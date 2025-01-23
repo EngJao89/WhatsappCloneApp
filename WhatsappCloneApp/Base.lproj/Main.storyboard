@@ -690,6 +690,9 @@
                                             <constraint firstAttribute="width" constant="32" id="hzD-jM-HI5"/>
                                         </constraints>
                                         <state key="normal" image="arquivo_icone"/>
+                                        <connections>
+                                            <action selector="enviarImagem:" destination="ywK-Oe-t1o" eventType="touchUpInside" id="0Hz-zL-VA9"/>
+                                        </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Digite uma mensagem" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fwN-dx-oY9">
                                         <rect key="frame" x="55" y="8" width="294" height="34"/>

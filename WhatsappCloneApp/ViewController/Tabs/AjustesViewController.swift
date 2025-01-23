@@ -94,6 +94,7 @@ class AjustesViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
                 let nomeImagem = "\(idUsuario).jpg"
                 let imagemPerfilRef = imagens.child("perfil").child( nomeImagem )
+                
                     imagemPerfilRef.putData(imagemUpload, metadata: nil) { (metaData, erro) in
                         
                         if erro == nil {
