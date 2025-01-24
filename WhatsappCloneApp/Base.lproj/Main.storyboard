@@ -674,6 +674,88 @@
                                             <outlet property="mensagemEsquerdaLabel" destination="4Zh-Mh-lU6" id="VUx-4D-Dmo"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="celulaImagemDireita" rowHeight="220" id="5Pa-ku-PK1" customClass="MensagensTableViewCell" customModule="WhatsApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="156" width="414" height="220"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Pa-ku-PK1" id="Hdy-Gt-4gT">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="220"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7MA-k0-dXV">
+                                                    <rect key="frame" x="80" y="11" width="314" height="198"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MA5-7Z-kmU">
+                                                            <rect key="frame" x="10" y="10" width="294" height="178"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="0.82352941180000006" green="1" blue="0.64705882349999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="MA5-7Z-kmU" secondAttribute="bottom" constant="10" id="BUV-jW-ULM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="MA5-7Z-kmU" secondAttribute="trailing" constant="10" id="G5X-3Y-2ap"/>
+                                                        <constraint firstItem="MA5-7Z-kmU" firstAttribute="top" secondItem="7MA-k0-dXV" secondAttribute="top" constant="10" id="hNg-sp-mN0"/>
+                                                        <constraint firstAttribute="height" constant="198" id="mpL-kV-65z"/>
+                                                        <constraint firstItem="MA5-7Z-kmU" firstAttribute="leading" secondItem="7MA-k0-dXV" secondAttribute="leading" constant="10" id="s8y-Aw-nUy"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="7MA-k0-dXV" firstAttribute="top" secondItem="Hdy-Gt-4gT" secondAttribute="topMargin" id="2ZM-vs-Y9r"/>
+                                                <constraint firstItem="7MA-k0-dXV" firstAttribute="trailing" secondItem="Hdy-Gt-4gT" secondAttribute="trailingMargin" id="igc-Ud-0E9"/>
+                                                <constraint firstItem="7MA-k0-dXV" firstAttribute="bottom" secondItem="Hdy-Gt-4gT" secondAttribute="bottomMargin" id="wQR-CN-QzO"/>
+                                                <constraint firstItem="7MA-k0-dXV" firstAttribute="leading" secondItem="Hdy-Gt-4gT" secondAttribute="leadingMargin" constant="60" id="x4l-Uj-L8Y"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="imagemDireita" destination="MA5-7Z-kmU" id="m50-hk-Nqe"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="celulaImagemEsquerda" rowHeight="220" id="0oO-Wp-SMC" customClass="MensagensTableViewCell" customModule="WhatsApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="376" width="414" height="220"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0oO-Wp-SMC" id="W9c-Xa-gCg">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="220"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gn3-6L-CFv">
+                                                    <rect key="frame" x="20" y="11" width="314" height="198"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4qb-o5-AGk">
+                                                            <rect key="frame" x="10" y="10" width="294" height="178"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="4qb-o5-AGk" secondAttribute="trailing" constant="10" id="F7D-ce-caS"/>
+                                                        <constraint firstAttribute="bottom" secondItem="4qb-o5-AGk" secondAttribute="bottom" constant="10" id="TtL-OR-ku2"/>
+                                                        <constraint firstItem="4qb-o5-AGk" firstAttribute="top" secondItem="gn3-6L-CFv" secondAttribute="top" constant="10" id="hPe-Hk-6OH"/>
+                                                        <constraint firstItem="4qb-o5-AGk" firstAttribute="leading" secondItem="gn3-6L-CFv" secondAttribute="leading" constant="10" id="iKo-3Z-8vU"/>
+                                                        <constraint firstAttribute="height" constant="198" id="mHK-1d-qdg"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="gn3-6L-CFv" firstAttribute="leading" secondItem="W9c-Xa-gCg" secondAttribute="leadingMargin" id="Hcg-4u-t8R"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="gn3-6L-CFv" secondAttribute="trailing" constant="60" id="OlT-Yu-5X4"/>
+                                                <constraint firstItem="gn3-6L-CFv" firstAttribute="top" secondItem="W9c-Xa-gCg" secondAttribute="topMargin" id="STR-2s-cqO"/>
+                                                <constraint firstItem="gn3-6L-CFv" firstAttribute="bottom" secondItem="W9c-Xa-gCg" secondAttribute="bottomMargin" id="isw-EJ-AOF"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="imagemEsquerda" destination="4qb-o5-AGk" id="uYH-2H-XHP"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="ywK-Oe-t1o" id="kmy-8k-4C3"/>

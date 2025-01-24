@@ -196,15 +196,29 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let celulaEsquerda = tableView.dequeueReusableCell(withIdentifier: "celulaMensagensEsquerda", for: indexPath) as! MensagensTableViewCell
         
+        let celulaImagemDireita = tableView.dequeueReusableCell(withIdentifier: "celulaImagemDireita", for: indexPath) as! MensagensTableViewCell
+        
+        let celulaImagemEsquerda = tableView.dequeueReusableCell(withIdentifier: "celulaImagemEsquerda", for: indexPath) as! MensagensTableViewCell
+        
         let indice = indexPath.row
         let dados = self.listaMensagens[indice]
         let texto = dados["texto"] as? String
         let idUsuario = dados["idUsuario"] as? String
+        let urlImagem = dados["urlImagem"] as? String
         
         if idUsuarioLogado == idUsuario {
+            if urlImagem != nil {
+                celulaImagemDireita.imagemDireita.sd_setImage(with: URL(string: urlImagem!), completed: nil)
+                return celulaImagemDireita
+            }
             celulaDireita.mensagemDireitaLabel.text = texto
             return celulaDireita
+            
         }else{
+            if urlImagem != nil {
+                celulaImagemEsquerda.imagemEsquerda.sd_setImage(with: URL(string: urlImagem!), completed: nil)
+                return celulaImagemEsquerda
+            }
             celulaEsquerda.mensagemEsquerdaLabel.text = texto
             return celulaEsquerda
         }
