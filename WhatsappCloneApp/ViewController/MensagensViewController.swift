@@ -22,8 +22,11 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     var contato: Dictionary<String, Any>!
     var mensagensListener: ListenerRegistration!
     var imagePicker = UIImagePickerController()
+    
     var nomeContato: String!
     var urlFotoContato: String!
+    var nomeUsuarioLogado: String!
+    var urlFotoUsuarioLogado: String!
     
     var auth: Auth!
     var db: Firestore!
@@ -41,6 +44,7 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         //Recuperar id usuario logado
         if let id = auth.currentUser?.uid {
             self.idUsuarioLogado = id
+            recuperaDadosUsuarioLogado()
         }
         
         //Configura título da tela
@@ -59,6 +63,28 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //Configura lista de mensagens
         //listaMensagens = ["Olá, tudo bem?", "Tudo ótimo meu amigo", "Estou muito doente e precisava falar com você, será que poderia ir na farmácia pegar alguns remédios?", "Posso sim, quais?", "Pode pegar um Resfenol, pode ser aquele dia e noite, sabe qual é?", "Sei sim!!", "Excelente!!Muuuuuuuito obrigadooo!!", "Por nada!! espero que melhore logo"]
+        
+    }
+    
+    func recuperaDadosUsuarioLogado() {
+        
+        let usuarios = db.collection("usuarios")
+        .document( idUsuarioLogado )
+        
+        usuarios.getDocument { (documentSnapshot, erro) in
+            
+            if erro == nil {
+                if let dados = documentSnapshot?.data() {
+                    if let url = dados["urlImagem"] as? String {
+                            if let nome = dados["nome"] as? String {
+                                self.urlFotoUsuarioLogado = url
+                                self.nomeUsuarioLogado = nome
+                            }
+                    }
+                }
+            }
+            
+        }
         
     }
     
@@ -106,19 +132,22 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
                                 //salvar mensagem para o destinatário
                                 self.salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: self.idUsuarioLogado, mensagem: mensagem)
                                 
-                                let conversa: Dictionary<String, Any> = [
-                                    "idRemetente" : self.idUsuarioLogado!,
-                                    "idDestinatario" : idUsuarioDestinatario,
-                                    "ultimaMensagem" : "imagem...",
-                                    "nomeUsuario" : self.nomeContato!,
-                                    "urlFotoUsuario" : self.urlFotoContato!,
-                                    "tipo" : "imagem" //pode ser "texto" ou "imagem"
+                                var conversa: Dictionary<String, Any> = [
+                                    "ultimaMensagem" : "imagem..."
                                 ]
                                 
-                                //salvar conversa para remetente
+                                //salvar conversa para remetente (dados quem recebe)
+                                conversa["idRemetente"] = self.idUsuarioLogado!
+                                conversa["idDestinatario"] = idUsuarioDestinatario
+                                conversa["nomeUsuario"] = self.nomeContato!
+                                conversa["urlFotoUsuario"] = self.urlFotoContato!
                                 self.salvarConversa(idRemetente: self.idUsuarioLogado, idDestinatario: idUsuarioDestinatario, conversa: conversa)
                                 
-                                //salvar conversa para destinatário
+                                //salvar conversa para destinatário (dados quem envia)
+                                conversa["idRemetente"] = idUsuarioDestinatario
+                                conversa["idDestinatario"] = self.idUsuarioLogado
+                                conversa["nomeUsuario"] = self.nomeUsuarioLogado
+                                conversa["urlFotoUsuario"] = self.urlFotoUsuarioLogado
                                 self.salvarConversa(idRemetente: idUsuarioDestinatario, idDestinatario: self.idUsuarioLogado, conversa: conversa)
                                 
                             }
@@ -159,19 +188,22 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
                     //salvar mensagem para o destinatário
                     salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: idUsuarioLogado, mensagem: mensagem)
                     
-                    let conversa: Dictionary<String, Any> = [
-                        "idRemetente" : idUsuarioLogado!,
-                        "idDestinatario" : idUsuarioDestinatario,
-                        "ultimaMensagem" : textoDigitado,
-                        "nomeUsuario" : nomeContato!,
-                        "urlFotoUsuario" : urlFotoContato!,
-                        "tipo" : "texto" //pode ser "texto" ou "imagem"
+                    var conversa: Dictionary<String, Any> = [
+                        "ultimaMensagem" : textoDigitado
                     ]
                     
-                    //salvar conversa para remetente
+                    //salvar conversa para remetente (dados quem recebe)
+                    conversa["idRemetente"] = idUsuarioLogado!
+                    conversa["idDestinatario"] = idUsuarioDestinatario
+                    conversa["nomeUsuario"] = self.nomeContato!
+                    conversa["urlFotoUsuario"] = self.urlFotoContato!
                     salvarConversa(idRemetente: idUsuarioLogado, idDestinatario: idUsuarioDestinatario, conversa: conversa)
                     
-                    //salvar conversa para destinatário
+                    //salvar conversa para destinatário (dados quem envia)
+                    conversa["idRemetente"] = idUsuarioDestinatario
+                    conversa["idDestinatario"] = idUsuarioLogado
+                    conversa["nomeUsuario"] = self.nomeUsuarioLogado
+                    conversa["urlFotoUsuario"] = self.urlFotoUsuarioLogado
                     salvarConversa(idRemetente: idUsuarioDestinatario, idDestinatario: idUsuarioLogado, conversa: conversa)
                     
                 }
@@ -182,10 +214,10 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func salvarConversa(idRemetente: String, idDestinatario: String, conversa: Dictionary<String, Any>) {
         
-        db.collection("convesas")
+        db.collection("conversas")
         .document( idRemetente )
-        .collection( idDestinatario )
-        .document("ultima_conversa")
+        .collection( "ultimas_conversas" )
+        .document( idDestinatario )
         .setData( conversa )
         
     }

@@ -90,6 +90,40 @@ class ConversasViewController: UIViewController, UITableViewDelegate,UITableView
         
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.tableViewConversas.deselectRow(at: indexPath, animated: true)
+        
+        let indice = indexPath.row
+        let conversa = self.listaConversas[indice]
+        
+        if let id = conversa["idDestinatario"] as? String {
+                if let nome = conversa["nomeUsuario"] as? String {
+                        if let url = conversa["urlFotoUsuario"] as? String {
+                            
+                            let contato: Dictionary<String, Any> = [
+                                "id" : id,
+                                "nome" : nome,
+                                "urlImagem" : url
+                            ]
+                            
+                            self.performSegue(withIdentifier: "iniciarConversa", sender: contato)
+                            
+                        }
+                }
+        }
+        
+        
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "iniciarConversa" {
+            let viewDestino = segue.destination as! MensagensViewController
+            viewDestino.contato = sender as? Dictionary
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         addListenerRecuperarConversas()
     }

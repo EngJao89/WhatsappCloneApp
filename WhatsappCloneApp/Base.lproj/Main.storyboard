@@ -306,6 +306,7 @@
                     <navigationItem key="navigationItem" title="Conversas" id="jWa-ah-z9H"/>
                     <connections>
                         <outlet property="tableViewConversas" destination="WDh-3q-gqc" id="yiX-tg-3Xk"/>
+                        <segue destination="ywK-Oe-t1o" kind="show" identifier="iniciarConversa" id="mTa-Te-IDw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cNn-R4-htR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -488,7 +489,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bEY-g0-pkv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4877" y="-673"/>
+            <point key="canvasLocation" x="4980" y="-1013"/>
         </scene>
         <!--Ajustes-->
         <scene sceneID="zpk-od-rYT">
@@ -899,7 +900,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OWC-nf-8Mn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4895.652173913044" y="-13.392857142857142"/>
+            <point key="canvasLocation" x="4980" y="-315"/>
         </scene>
     </scenes>
     <resources>
@@ -911,4 +912,7 @@
         <image name="logo" width="416" height="339"/>
         <image name="usuario" width="256" height="192"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="mTa-Te-IDw"/>
+    </inferredMetricsTieBreakers>
 </document>
