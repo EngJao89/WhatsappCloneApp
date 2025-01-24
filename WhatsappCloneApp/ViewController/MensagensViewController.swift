@@ -22,6 +22,8 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
     var contato: Dictionary<String, Any>!
     var mensagensListener: ListenerRegistration!
     var imagePicker = UIImagePickerController()
+    var nomeContato: String!
+    var urlFotoContato: String!
     
     var auth: Auth!
     var db: Firestore!
@@ -42,8 +44,13 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         //Configura título da tela
-        if let nome = contato["nome"] {
-            self.navigationItem.title = nome as? String
+        if let nome = contato["nome"] as? String {
+            nomeContato = nome
+            self.navigationItem.title = nomeContato
+        }
+        
+        if let url = contato["urlImagem"] as? String {
+            urlFotoContato = url
         }
 
         //configurações da tableView
@@ -99,6 +106,21 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
                                 //salvar mensagem para o destinatário
                                 self.salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: self.idUsuarioLogado, mensagem: mensagem)
                                 
+                                let conversa: Dictionary<String, Any> = [
+                                    "idRemetente" : self.idUsuarioLogado!,
+                                    "idDestinatario" : idUsuarioDestinatario,
+                                    "ultimaMensagem" : "imagem...",
+                                    "nomeUsuario" : self.nomeContato!,
+                                    "urlFotoUsuario" : self.urlFotoContato!,
+                                    "tipo" : "imagem" //pode ser "texto" ou "imagem"
+                                ]
+                                
+                                //salvar conversa para remetente
+                                self.salvarConversa(idRemetente: self.idUsuarioLogado, idDestinatario: idUsuarioDestinatario, conversa: conversa)
+                                
+                                //salvar conversa para destinatário
+                                self.salvarConversa(idRemetente: idUsuarioDestinatario, idDestinatario: self.idUsuarioLogado, conversa: conversa)
+                                
                             }
                             
                         }
@@ -137,9 +159,34 @@ class MensagensViewController: UIViewController, UITableViewDelegate, UITableVie
                     //salvar mensagem para o destinatário
                     salvarMensagem(idRemetente: idUsuarioDestinatario, idDestinatario: idUsuarioLogado, mensagem: mensagem)
                     
+                    let conversa: Dictionary<String, Any> = [
+                        "idRemetente" : idUsuarioLogado!,
+                        "idDestinatario" : idUsuarioDestinatario,
+                        "ultimaMensagem" : textoDigitado,
+                        "nomeUsuario" : nomeContato!,
+                        "urlFotoUsuario" : urlFotoContato!,
+                        "tipo" : "texto" //pode ser "texto" ou "imagem"
+                    ]
+                    
+                    //salvar conversa para remetente
+                    salvarConversa(idRemetente: idUsuarioLogado, idDestinatario: idUsuarioDestinatario, conversa: conversa)
+                    
+                    //salvar conversa para destinatário
+                    salvarConversa(idRemetente: idUsuarioDestinatario, idDestinatario: idUsuarioLogado, conversa: conversa)
+                    
                 }
             }
         }
+        
+    }
+    
+    func salvarConversa(idRemetente: String, idDestinatario: String, conversa: Dictionary<String, Any>) {
+        
+        db.collection("convesas")
+        .document( idRemetente )
+        .collection( idDestinatario )
+        .document("ultima_conversa")
+        .setData( conversa )
         
     }
     

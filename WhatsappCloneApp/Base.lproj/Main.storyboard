@@ -219,23 +219,94 @@
         <!--Conversas-->
         <scene sceneID="LFX-sA-MRj">
             <objects>
-                <viewController id="Hhw-nY-iNb" sceneMemberID="viewController">
+                <viewController id="Hhw-nY-iNb" customClass="ConversasViewController" customModule="WhatsApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8kp-SP-NYk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Conversas" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ArQ-7b-SxJ">
-                                <rect key="frame" x="123" y="426" width="169" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="37"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WDh-3q-gqc">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="celulaConversa" id="S0w-XE-Ctn" customClass="ConversaTableViewCell" customModule="WhatsApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="S0w-XE-Ctn" id="rVl-dD-23U">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3j7-ZJ-MaR">
+                                                    <rect key="frame" x="30" y="16" width="50" height="48"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="aK3-FT-QWa"/>
+                                                        <constraint firstAttribute="width" constant="50" id="wDq-Eh-sYg"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="25"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="sMO-kb-3bM">
+                                                    <rect key="frame" x="85" y="16" width="299" height="48"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jamilton Damasceno" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFr-T9-JFA">
+                                                            <rect key="frame" x="0.0" y="0.0" width="169" height="23"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="23" id="fbU-B8-lvm"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Última mensagem" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d6f-Iz-Hdv">
+                                                            <rect key="frame" x="0.0" y="30" width="123.5" height="18"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="18" id="zMl-ar-pza"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" white="0.50881135850000003" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="3j7-ZJ-MaR" firstAttribute="leading" secondItem="rVl-dD-23U" secondAttribute="leadingMargin" constant="10" id="3fc-sd-Do3"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="sMO-kb-3bM" secondAttribute="trailing" constant="10" id="7DS-fN-C99"/>
+                                                <constraint firstItem="sMO-kb-3bM" firstAttribute="top" secondItem="rVl-dD-23U" secondAttribute="topMargin" constant="5" id="7V6-BJ-tj3"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="3j7-ZJ-MaR" secondAttribute="bottom" constant="5" id="8vv-mt-g22"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="sMO-kb-3bM" secondAttribute="bottom" constant="5" id="Gxq-I7-ivA"/>
+                                                <constraint firstItem="3j7-ZJ-MaR" firstAttribute="top" secondItem="rVl-dD-23U" secondAttribute="topMargin" constant="5" id="MEy-WM-Shz"/>
+                                                <constraint firstItem="sMO-kb-3bM" firstAttribute="leading" secondItem="3j7-ZJ-MaR" secondAttribute="trailing" constant="5" id="yPv-hS-ccn"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="fotoConversa" destination="3j7-ZJ-MaR" id="t7J-2k-sT0"/>
+                                            <outlet property="nomeConversa" destination="OFr-T9-JFA" id="HXB-ac-5qq"/>
+                                            <outlet property="ultimaConversa" destination="d6f-Iz-Hdv" id="0V7-zy-WFt"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Hhw-nY-iNb" id="bjW-ea-LyR"/>
+                                    <outlet property="delegate" destination="Hhw-nY-iNb" id="iGF-W6-mqR"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="WDh-3q-gqc" firstAttribute="top" secondItem="bMs-Al-QJv" secondAttribute="top" id="272-bx-e1X"/>
+                            <constraint firstItem="WDh-3q-gqc" firstAttribute="trailing" secondItem="bMs-Al-QJv" secondAttribute="trailing" id="DYf-qs-Yrb"/>
+                            <constraint firstItem="WDh-3q-gqc" firstAttribute="bottom" secondItem="bMs-Al-QJv" secondAttribute="bottom" id="dAk-xK-POI"/>
+                            <constraint firstItem="WDh-3q-gqc" firstAttribute="leading" secondItem="bMs-Al-QJv" secondAttribute="leading" id="v5B-SB-liK"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="bMs-Al-QJv"/>
                     </view>
                     <navigationItem key="navigationItem" title="Conversas" id="jWa-ah-z9H"/>
+                    <connections>
+                        <outlet property="tableViewConversas" destination="WDh-3q-gqc" id="yiX-tg-3Xk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cNn-R4-htR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
