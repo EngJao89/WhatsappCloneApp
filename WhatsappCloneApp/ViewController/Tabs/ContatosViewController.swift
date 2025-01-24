@@ -6,90 +6,155 @@
 //
 
 import UIKit
+import FirebaseUI
 import FirebaseAuth
 import FirebaseFirestore
 
-class CadastroContatoViewController: UIViewController {
+class ContatosViewController: UIViewController, UITableViewDelegate,UITableViewDataSource, UISearchBarDelegate {
     
-    @IBOutlet weak var campoEmail: UITextField!
-    @IBOutlet weak var mensagemErro: UILabel!
     
-    var idUsuarioLogado: String!
-    var emailUsuarioLogado: String!
+    @IBOutlet weak var tableViewContatos: UITableView!
+    @IBOutlet weak var searchBarContatos: UISearchBar!
     
     var auth: Auth!
     var db: Firestore!
+    var idUsuarioLogado: String!
+    var listaContatos: [Dictionary<String, Any>] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        searchBarContatos.delegate = self
+        tableViewContatos.separatorStyle = .none
+        
+        
         auth = Auth.auth()
         db = Firestore.firestore()
         
-        if let currentUser = auth.currentUser {
-            self.idUsuarioLogado = currentUser.uid
-            self.emailUsuarioLogado = currentUser.email
+        //Recuperar id usuario logado
+        if let id = auth.currentUser?.uid {
+            self.idUsuarioLogado = id
         }
         
     }
     
-    @IBAction func cadastrarContato(_ sender: Any) {
-        
-        self.mensagemErro.isHidden = true
-        
-        //Verifica e está adicionado próprio e-mail
-        if let emailDigitado = campoEmail.text {
-            if emailDigitado == self.emailUsuarioLogado {
-                mensagemErro.isHidden = false
-                mensagemErro.text = "Você está adicionado seu próprio email!"
-                return
+    override func viewDidAppear(_ animated: Bool) {
+        recuperarContatos()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            recuperarContatos()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let textoResultado = searchBar.text {
+            if textoResultado != "" {
+                pesquisarContatos(texto: textoResultado)
             }
-            
-            //Verifica se existe o usuário no Firebase
-            db.collection("usuarios")
-            .whereField("email", isEqualTo: emailDigitado)
-                .getDocuments { (snapshotResultado, erro) in
-                    
-                    //Conta total de retorno
-                    if let totalItens = snapshotResultado?.count {
-                        if totalItens == 0 {
-                            self.mensagemErro.text = "Usuário não cadastrado!"
-                            self.mensagemErro.isHidden = false
-                            return
-                        }
-                    }
-                    
-                    //Salva contato
-                    if let snapshot = snapshotResultado {
-                        
-                        for document in snapshot.documents {
-                            let dados = document.data()
-                            self.salvarContato(dadosContato: dados)
-                        }
-                        
-                    }
-                    
+        }
+    }
+    
+    func pesquisarContatos(texto: String) {
+        
+        let listaFiltro: [Dictionary<String, Any>] = self.listaContatos
+        self.listaContatos.removeAll()
+        
+        for item in listaFiltro {
+            if let nome = item["nome"] as? String {
+                if nome.lowercased().contains(texto.lowercased()) {
+                    self.listaContatos.append(item)
+                }
             }
-            
+        }
+        
+        self.tableViewContatos.reloadData()
+        
+    }
+    
+    func recuperarContatos(){
+        
+        self.listaContatos.removeAll()
+        db.collection("usuarios")
+        .document( idUsuarioLogado )
+        .collection("contatos")
+            .getDocuments { (snapshotResultado, erro) in
+                
+                if let snapshot = snapshotResultado {
+                    for document in snapshot.documents {
+                        
+                        let dadosContato = document.data()
+                        self.listaContatos.append(dadosContato)
+                        
+                    }
+                    self.tableViewContatos.reloadData()
+                }
+                
         }
         
     }
     
-    func salvarContato(dadosContato: Dictionary<String, Any>) {
+    /*Métodos para listagem na tabela */
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let totalContato = self.listaContatos.count
         
-        if let idUsuarioContato = dadosContato["id"] {
-            db.collection("usuarios")
-            .document( idUsuarioLogado )
-            .collection("contatos")
-            .document( String(describing: idUsuarioContato) )
-                .setData(dadosContato) { (erro) in
-                    if erro == nil {
-                        self.navigationController?.popViewController(animated: true)
-                        
-                    }
-            }
+        if totalContato == 0 {
+            return 1
         }
+        return totalContato
         
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let celula = tableView.dequeueReusableCell(withIdentifier: "celulaContatos", for: indexPath) as! ContatoTableViewCell
+        
+        celula.fotoContato.isHidden = false
+        if self.listaContatos.count == 0 {
+            celula.textoNome.text = "Nenhum contato cadastrado"
+            celula.textoEmail.text = ""
+            celula.fotoContato.isHidden = true
+            return celula
+        }
+        
+        let indice = indexPath.row
+        let dadosContato = self.listaContatos[indice]
+        
+        celula.textoNome.text = dadosContato["nome"] as? String
+        celula.textoEmail.text = dadosContato["email"] as? String
+        
+        if let foto = dadosContato["urlImagem"] as? String {
+            celula.fotoContato.sd_setImage(with: URL(string: foto), completed: nil)
+        }else{
+            celula.fotoContato.image = UIImage(named: "imagem-perfil")
+        }
+        
+        return celula
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.tableViewContatos.deselectRow(at: indexPath, animated: true)
+        
+        let indice = indexPath.row
+        let contato = self.listaContatos[indice]
+        
+        self.performSegue(withIdentifier: "iniciarConversaContato", sender: contato)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "iniciarConversaContato" {
+            let viewDestino = segue.destination as! MensagensViewController
+            viewDestino.contato = sender as? Dictionary
+        }
+    }
+
 }
